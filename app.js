@@ -15,6 +15,7 @@ const authenticateUser = require('./middleware/authentication');
 // routers
 const authRouter = require('./routes/auth');
 const coursesRouter = require('./routes/courses');
+const registersRouter = require('./routes/Registers');
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -39,7 +40,7 @@ app.use(xss());
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/courses', authenticateUser, coursesRouter);
-
+app.use('/api/v1/registers', authenticateUser, registersRouter);
 app.use(express.static("public"));
 
 app.use(notFoundMiddleware);

@@ -1,10 +1,9 @@
-const {date} = require('joi')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const RegisterSchema=({
+const RegisterSchema=new mongoose.Schema({
 
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: "User" } ,
-    courseId:{ type:mongoose. Schema.type.ObjectId , ref:"Course"} ,
+    courseId:{ type:mongoose.Schema.Types.ObjectId, ref:"Course"} ,
     quarter: { type: String, required: true, enum: ["Winter", "Spring", "Summer", "Fall"] }, // Quarter of registration
     year: { type: Number, required: true }, // Example: 2025
     status: { type: String, enum: ["enrolled", "dropped"], default: "enrolled" }, 
@@ -12,8 +11,5 @@ const RegisterSchema=({
         type: mongoose.Schema.Types.ObjectId , ref: "User"
     }
 }
- , 
-    { timestamps: true }
-
-)
+, { timestamps: true });
 module.exports = mongoose.model ('Register' , RegisterSchema)

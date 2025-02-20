@@ -56,14 +56,13 @@ const createCourse = async (req, res) => {
   };
   
   const deleteCourse  = async (req, res) => {
-    console.log("course")
+   
     const {
       user: { userId },
       params: { id: courseId },
     } = req;
-    console.log(userId)
-    console.log(courseId)
-    const course = await Course.findOneAndRemove({
+    
+    const course = await Course.findOneAndDelete({
       _id: courseId,
       createdBy: userId,
     });
