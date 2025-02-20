@@ -14,8 +14,7 @@ const authenticateUser = require('./middleware/authentication');
 
 // routers
 const authRouter = require('./routes/auth');
-const jobsRouter = require('./routes/jobs');
-const studentsRouter = require('./routes/students');
+const coursesRouter = require('./routes/courses');
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -39,8 +38,8 @@ app.use(xss());
 
 // routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/jobs', authenticateUser, jobsRouter);
-app.use('/api/v1/students', authenticateUser, studentsRouter);
+app.use('/api/v1/courses', authenticateUser, coursesRouter);
+
 app.use(express.static("public"));
 
 app.use(notFoundMiddleware);
