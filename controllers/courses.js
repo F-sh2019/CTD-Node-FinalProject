@@ -29,31 +29,51 @@ const createCourse = async (req, res) => {
     
     req.body.createdBy = req.user.userId;
     const course = await Course.create(req.body);
+    console.log("course")
     res.status(StatusCodes.CREATED).json({ course });
+    console.log(course)
 
   };
 
   const updateCourse = async (req, res) => {
     const {
-      body: { teacherId, title , description , schedule },
-      user: { userId },
-      params: { id: courseId },
+        body: { teacher, title, description, schedule, document, pic },
+        user: { userId },
+        params: { id: courseId },
     } = req;
-  
-    if (teacherId === '' || title === '' || description === '' || schedule ==='') {
-      throw new BadRequestError('teacherId or title or schedule fields cannot be empty');
+
+    // Validate required fields
+    if (!teacher || !title || !description || !schedule) {
+        throw new BadRequestError('Teacher, title, description, and schedule fields cannot be empty');
     }
-  
-    const course = await Course.findOneAndUpdate(
-      { _id: courseId, createdBy: userId },
-      req.body,
-      { new: true, runValidators: true }
-    );
+
+    // Find course first
+    let course = await Course.findOne({ _id: courseId, createdBy: userId });
+
     if (!course) {
-      throw new NotFoundError(`No course with id ${courseId}`);
+        throw new NotFoundError(`No course with id ${courseId}`);
     }
+
+    // Update fields
+    course.title = title;
+    course.description = description;
+    course.schedule = schedule;
+    course.teacher = teacher;
+
+    // Handle optional fields (images/documents)
+    if (document) {
+        course.document.data = Buffer.from(document, 'base64'); // Convert base64 string to Buffer
+    }
+    if (pic) {
+        course.pic.data = Buffer.from(pic, 'base64'); // Convert base64 string to Buffer
+    }
+
+    // Save updated course
+    await course.save();
+
     res.status(StatusCodes.OK).json({ course });
-  };
+};
+
   
   const deleteCourse  = async (req, res) => {
    

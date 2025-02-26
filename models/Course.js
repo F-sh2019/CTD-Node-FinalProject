@@ -10,6 +10,10 @@ const CourseSchema = new mongoose.Schema({
             endTime: { type: String, required: true },
         }
     ],
+    document: {
+        type: String} ,
+    pic: {
+        type: String} ,
     teacher: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 }, { timestamps: true });
