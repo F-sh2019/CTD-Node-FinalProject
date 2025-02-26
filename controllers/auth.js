@@ -28,15 +28,28 @@ const login = async (req, res) => {
 }
 
 const getAllUsers= async(req , res) =>{
-  console.log("Users")
+ 
   const Users =  await User.find().sort('createdAt');
   console.log(Users)
   res.status(StatusCodes.OK).json({ Users, count: Users.length })
 }
+const deleteUser= async(req , res) =>{
+ const {
+     
+      params: { id: userId },
+    } = req;
+  const user =  await User.findByIdAndDelete({ _id: userId})
+ 
+  if (!user) {
+    throw new NotFoundError(`No course with id ${Email}`);
+  }
+  res.status(StatusCodes.OK).json({ msg: "The entry was deleted." });
 
+}
 
 module.exports = {
   register,
   login,
   getAllUsers,
+  deleteUser,
 }
