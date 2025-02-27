@@ -30,7 +30,7 @@ const login = async (req, res) => {
 const getAllUsers= async(req , res) =>{
  
   const Users =  await User.find().sort('createdAt');
-  console.log(Users)
+  //console.log(Users)
   res.status(StatusCodes.OK).json({ Users, count: Users.length })
 }
 const deleteUser= async(req , res) =>{

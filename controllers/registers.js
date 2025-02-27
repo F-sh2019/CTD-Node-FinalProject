@@ -10,7 +10,7 @@ const getAllRegister = async ( req , res) =>{
 }
 
 const getRegister = async (req , res) =>{
-    console.log(req)
+    //console.log(req)
     const {
         user: { userId },
         params: { id: registerId },
