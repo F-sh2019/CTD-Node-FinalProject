@@ -12,6 +12,8 @@ const app = express();
 const connectDB = require('./db/connect');
 const authenticateUser = require('./middleware/authentication');
 const uploads=require('./middleware/upload')
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // routers
 const authRouter = require('./routes/auth');
@@ -39,13 +41,40 @@ app.use(helmet());
 app.use(cors());
 app.use(xss());
 
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Course API',
+      version: '1.0.0',
+      description: 'API documentation for course management',
+    },
+    servers: [{ url: 'http://localhost:3000' }],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      }
+    },
+    security: [{ BearerAuth: [] }]
+  },
+  apis: ['./routes/auth.js', './routes/courses.js', './routes/registers.js'],
+};
 
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/courses', authenticateUser, coursesRouter);
 app.use('/api/v1/registers', authenticateUser, registersRouter);
 app.use(express.static("public"));
+
+
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -64,3 +93,8 @@ const start = async () => {
 };
 
 start();
+
+
+
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
